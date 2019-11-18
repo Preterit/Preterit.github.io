@@ -3,20 +3,11 @@
   <entry>
     <title>hexo博客搭建</title>
     <url>/2019/11/17/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><ul>
-<li><p>博客框架:</p>
-<ul>
-<li><a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo</a> 是高效的静态站点生成框架，她基于 <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a>。 通过 Hexo 你可以轻松地使用 Markdown 编写文章。</li>
-</ul>
-</li>
-<li><p>主题:</p>
-<ul>
-<li><a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">NexT</a>     简介 ，简约 ，大气</li>
-</ul>
-</li>
-<li><p>服务:  github pages服务</p>
-</li>
-<li><p>优点:</p>
+    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><blockquote>
+<p>博客框架:  <a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo</a> 是高效的静态站点生成框架，她基于 <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a>。 通过 Hexo 你可以轻松地使用 Markdown 编写文章。</p>
+<p>主题:  <a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">NexT</a>     简介 ，简约 ，大气</p>
+<p>服务:  github pages服务</p>
+<p>优点:</p>
 <ol>
 <li>全是静态文件，访问速度快        </li>
 <li>免费方便，不用花一分钱就可以搭建一个自由的个人博客，不需要服务器不需要后台</li>
@@ -24,80 +15,87 @@
 <li>数据绝对安全，基于github的版本管理，想恢复到哪个历史版本都行；</li>
 <li>博客内容可以轻松打包、转移、发布到其它平台；</li>
 </ol>
+</blockquote>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><ol>
+<li><p>GitHub 账号，没有的话注册一个；</p>
 </li>
-</ul>
-<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><ol>
-<li>GitHub 账号，没有的话注册一个；</li>
-<li><a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js</a> ，npm ，相关</li>
-<li><a href="https://git-scm.com/" target="_blank" rel="noopener">git</a></li>
+<li><p><a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js</a> ，npm ，相关</p>
+</li>
+<li><p><a href="https://git-scm.com/" target="_blank" rel="noopener">git</a> </p>
+</li>
 </ol>
-<h5 id="1-创建仓库"><a href="#1-创建仓库" class="headerlink" title="1.创建仓库"></a>1.创建仓库</h5><pre><code>新建一个名为`你Github的用户名.github.io`的仓库，你的用户名是`zhangsan`，那么你的仓库名称就必须        是`zhangsan.github.io` ，</code></pre><h5 id="2-绑定域名-可有可无，直接访问你的用户名-github-io-也行"><a href="#2-绑定域名-可有可无，直接访问你的用户名-github-io-也行" class="headerlink" title="2.绑定域名(可有可无，直接访问你的用户名.github.io 也行)"></a>2.绑定域名(可有可无，直接访问<code>你的用户名.github.io</code> 也行)</h5><p>​        首先你要注册一个域名，推荐 <a href="https://wanwang.aliyun.com/" target="_blank" rel="noopener">阿里万网</a> 价格不贵，大公司，用的也放心。</p>
+<h2 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h2><blockquote>
+<p>新建一个名为<code>你Github的用户名.github.io</code>的仓库，你的用户名是<code>zhangsan</code>，那么你的仓库名称就必须是<code>zhangsan.github.io</code> ，</p>
+</blockquote>
+<h2 id="绑定域名-可有可无，直接访问你的用户名-github-io-也行"><a href="#绑定域名-可有可无，直接访问你的用户名-github-io-也行" class="headerlink" title="绑定域名(可有可无，直接访问你的用户名.github.io 也行)"></a>绑定域名(可有可无，直接访问<code>你的用户名.github.io</code> 也行)</h2><p>​        首先你要注册一个域名，推荐 <a href="https://wanwang.aliyun.com/" target="_blank" rel="noopener">阿里万网</a> 价格不贵，大公司，用的也放心。</p>
 <p>​        解析你的域名: </p>
-<img src="2019-11-17_06.png" style="zoom:50%;" />                        
-
-<p>​        然后到你的github项目根目录新建一个名为CNAME的文件（无后缀），里面填写你的域名，加不加www看        你自己喜好，</p>
-<h5 id="3-配置SSH-Key"><a href="#3-配置SSH-Key" class="headerlink" title="3.配置SSH Key"></a>3.配置SSH Key</h5><p>​        为什么要配置这个呢？因为你提交代码肯定要拥有你的github权限才可以，但是直接使用用户名和密码太不安全了，所以使用ssh key来解决本地和服务器的连接问题。</p>
+<p><img src="2019-11-17_06.png" style="zoom:50%;" />            然后到你的github项目根目录新建一个名为CNAME的文件（无后缀），里面填写你的域名，加不加www看        你自己喜好，</p>
+<h2 id="配置SSH-Key"><a href="#配置SSH-Key" class="headerlink" title="配置SSH Key"></a>配置SSH Key</h2><blockquote>
+<p>为什么要配置这个呢？因为你提交代码肯定要拥有你的github权限才可以，但是直接使用用户名和密码太不安全了，所以使用ssh key来解决本地和服务器的连接问题。</p>
+</blockquote>
 <ul>
 <li><p><a href="https://blog.csdn.net/wxrNine_/article/details/90756514" target="_blank" rel="noopener">这里就不一步一步操作了直接贴出经常访问的小网站</a></p>
 </li>
 <li><p>还要说一下，我在这块遇到的坑，使用<code>hexo d</code>命令上传代码的时候，怎么也传不上去，其他的配置都没问题，咋地都没想到是<code>公钥不对</code> ，被自己蠢哭了。   <code>ssh git@github.com</code> 使用这个命令检查下连接是否成功，不成功就从新生成下ssh文件，打开你的github主页，进入个人设置 -&gt; SSH and GPG keys -&gt; New SSH key，替换。</p>
 </li>
 </ul>
-<h5 id="4-hexo-安装-初始化"><a href="#4-hexo-安装-初始化" class="headerlink" title="4.hexo 安装 /初始化"></a>4.hexo 安装 /初始化</h5><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在电脑的某个地方新建一个文件夹(名字随便)</span></span><br><span class="line">npm install -g hexo  <span class="comment">// 安装</span></span><br><span class="line"></span><br><span class="line">hexo init   <span class="comment">// 初始化hexo</span></span><br></pre></td></tr></table></figure>
+<h2 id="hexo-安装-初始化"><a href="#hexo-安装-初始化" class="headerlink" title="hexo 安装 /初始化"></a>hexo 安装 /初始化</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在电脑的某个地方新建一个文件夹(名字随便)</span></span><br><span class="line">npm install -g hexo  <span class="comment">// 安装</span></span><br><span class="line"></span><br><span class="line">hexo init   <span class="comment">// 初始化hexo</span></span><br></pre></td></tr></table></figure>
 
 <p>创建完了会有如下目录结构:<img src="2019-11-17_07.png" style="zoom:50%;" /></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">hexo g <span class="comment">//  生成</span></span><br><span class="line">hexo s <span class="comment">// 启动服务 开启本地预览服务，打开http://localhost:4000 即可看到内容</span></span><br></pre></td></tr></table></figure>
 
-<h5 id="5-替换主题-这里使用的开头介绍的next-，-推荐一个主题-hexo-theme-yilia"><a href="#5-替换主题-这里使用的开头介绍的next-，-推荐一个主题-hexo-theme-yilia" class="headerlink" title="5.替换主题 (这里使用的开头介绍的next ， 推荐一个主题 hexo-theme-yilia  )"></a>5.替换主题 (这里使用的开头介绍的next ， 推荐一个主题 <a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">hexo-theme-yilia</a>  )</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">git clone https:<span class="comment">//github.com/iissnan/hexo-theme-next themes/next</span></span><br></pre></td></tr></table></figure>
+<h2 id="替换主题-这里使用的开头介绍的next"><a href="#替换主题-这里使用的开头介绍的next" class="headerlink" title="替换主题 (这里使用的开头介绍的next )"></a>替换主题 (这里使用的开头介绍的next )</h2><blockquote>
+<p> 这里推荐一个主题 <a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">hexo-theme-yilia</a>  </p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">git clone https:<span class="comment">//github.com/iissnan/hexo-theme-next themes/next</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>修改站点下<code>_config.yml</code>中的<code>theme: landscape</code>改为<code>theme: next</code>，然后重新执行<code>hexo g</code>来重新生成。</p>
 <p>如果出现一些莫名其妙的问题，可以先执行<code>hexo clean</code>来清理一下public的内容，然后再来重新生成和发布。</p>
 </li>
 </ul>
+<blockquote>
 <p>如果出现一些莫名其妙的问题，可以先执行<code>hexo clean</code>来清理一下public的内容，然后再来重新生成和发布。</p>
-<h5 id="6-上传到GitHub"><a href="#6-上传到GitHub" class="headerlink" title="6.上传到GitHub"></a>6.上传到GitHub</h5><ul>
+</blockquote>
+<h2 id="上传到GitHub"><a href="#上传到GitHub" class="headerlink" title="上传到GitHub"></a>上传到GitHub</h2><ul>
 <li><p><code>ssh key</code> 没有问题；</p>
 </li>
 <li><p>配置站点下<code>_config.yml</code>中的 <code>deploy</code> 部分；</p>
-<ul>
-<li><pre><code class="java">deploy:
-  type: git   <span class="comment">// git</span>
-  repository: git<span class="meta">@github</span>.com:你的用户名/你的用户名.github.io.git
-  branch: master  <span class="comment">// master分支</span>
-&lt;!--￼<span class="number">3</span>--&gt;
-
-
-</code></pre>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">type: git   <span class="comment">// git</span></span><br><span class="line">repository: git<span class="meta">@github</span>.com:你的用户名/你的用户名.github.io.git</span><br><span class="line">branch: master  <span class="comment">// master分支</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>发布到GitHub上</p>
+</li>
+<li><p>访问<code>你的域名/你的用户名.github.io</code></p>
 </li>
 </ul>
-</li>
-</ul>
-<h2 id="在修改主题中遇到的坑"><a href="#在修改主题中遇到的坑" class="headerlink" title="在修改主题中遇到的坑"></a>在修改主题中遇到的坑</h2><p>###1.修改打赏功能微信支付/支付宝支付字样 抖动</p>
-<ul>
+<h1 id="常用hexo命令"><a href="#常用hexo命令" class="headerlink" title="常用hexo命令"></a>常用hexo命令</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">hexo n <span class="string">"postName"</span>         <span class="comment">// 新建文章</span></span><br><span class="line">hexo n page <span class="string">"pageName"</span>    <span class="comment">//新建页面</span></span><br><span class="line">hexo g             				<span class="comment">//生成静态页面至public目录</span></span><br><span class="line">hexo s		                <span class="comment">//开启预览访问端口（默认端口4000，'ctrl + c'关闭server）</span></span><br><span class="line">hexo d			     					<span class="comment">//部署到GitHub</span></span><br><span class="line">hexo help  								<span class="comment">//查看帮助</span></span><br><span class="line">hexo version  						<span class="comment">//查看Hexo的版本</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<p>/////////////////////////////////////////////////////////////</p>
+<h1 id="在修改主题中遇到的坑"><a href="#在修改主题中遇到的坑" class="headerlink" title="在修改主题中遇到的坑"></a>在修改主题中遇到的坑</h1><h2 id="修改打赏功能微信支付-支付宝支付字样-抖动"><a href="#修改打赏功能微信支付-支付宝支付字样-抖动" class="headerlink" title="修改打赏功能微信支付/支付宝支付字样 抖动"></a>修改打赏功能微信支付/支付宝支付字样 抖动</h2><ul>
 <li>进入下面目录，编辑post_reward.styl</li>
-</ul>
-<p><img src="hide_reward.png" alt=""></p>
-<ul>
+<li><img src="hide_reward.png" style="zoom:50%;" /></li>
 <li><img src="2019-11-17_05.png" style="zoom:50%;" /></li>
 <li>刷新页面 ok </li>
 </ul>
-<h3 id="2-点击搜索跳转到新窗口"><a href="#2-点击搜索跳转到新窗口" class="headerlink" title="2.点击搜索跳转到新窗口"></a>2.点击搜索跳转到新窗口</h3><ul>
+<h2 id="点击搜索跳转到新窗口"><a href="#点击搜索跳转到新窗口" class="headerlink" title="点击搜索跳转到新窗口"></a>点击搜索跳转到新窗口</h2><ul>
 <li>方法同上面一样，首先找到对应的文件</li>
 </ul>
 <img src="2019-11-17_02.png" style="zoom:50%;" />
 
-
-
 <ul>
-<li>找到如图位置<img src="2019-11-17_03.png" style="zoom:50%;" /></li>
-</ul>
-<ul>
-<li>将上图<code>javascript:;</code> 修改为<code>#</code></li>
-<li></li>
-</ul>
+<li><p>找到如图位置<img src="2019-11-17_03.png" style="zoom:50%;" /></p>
+</li>
+<li><p>将上图<code>javascript:;</code> 修改为<code>#</code></p>
 <img src="2019-11-17_04.png" alt="2019-11-17_04" style="zoom:50%;" />
 
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>hexo</category>
@@ -116,8 +114,8 @@
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info:<a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing.js</a></p>
+<h3 id="Run-server-Writing-js"><a href="#Run-server-Writing-js" class="headerlink" title="Run server Writing.js"></a>Run server <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing.js</a></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
 <h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate <code>static</code> files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
