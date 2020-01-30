@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Android启动优化</title>
+    <url>/2019/11/22/Android%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/</url>
+    <content><![CDATA[<h1 id="绘制原理："><a href="#绘制原理：" class="headerlink" title="绘制原理："></a>绘制原理：</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//处理数据</span></span><br><span class="line"><span class="number">1</span>:在UI线程处理数据</span><br><span class="line">Process.setThreadPriority() 设置优先级</span><br><span class="line"><span class="number">2</span>:子线程抢占时间片，导致主线程拿不到时间片</span><br><span class="line"><span class="number">3</span>:内存增加导致GC频繁而引起卡顿</span><br><span class="line">   内存大 --&gt; GC --&gt; stop the world</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Android 应用把经过测量、布局、绘制后的surface缓存数据，通过SurfaceFlinger把数据渲染到显示屏幕上，通过Android的刷新机制来刷新绘制。</span><br><span class="line">  </span><br><span class="line">  <span class="number">1</span>:应用层负责绘制</span><br><span class="line">  <span class="number">2</span>:系统层负责渲染</span><br><span class="line">  <span class="number">3</span>:c/s架构</span><br><span class="line">  <span class="number">4</span>:SurfaceFlinger(C++)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">应用层：</span><br><span class="line">  Measure：深度优化</span><br><span class="line">  Layout： 深度优化</span><br><span class="line">  Draw:</span><br><span class="line">    软件绘制</span><br><span class="line">    硬件加速(GPU)</span><br><span class="line">      比CPU耗电</span><br><span class="line">      兼容问题(不是所有API都支持硬件加速)</span><br><span class="line">      内存大</span><br><span class="line">    </span><br><span class="line"> Bitmap() 有回收机制，开启硬件加速后不存在回收</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 系统层：</span></span><br><span class="line"><span class="number">1</span>:相应客户端事件，创建Layer与客户端的Surface建立联系</span><br><span class="line"><span class="number">2</span>:接收客户端数据及属性，修改Layer属性，比如尺寸、颜色、透明度等</span><br><span class="line"><span class="number">3</span>:将创建的Layer内容刷新到屏幕上</span><br><span class="line"><span class="number">4</span>:维持Layer的序列，并对Layer最终输出作出裁剪计算</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">view 无限大的，屏幕大小有限</span><br><span class="line"><span class="comment">// 应用层绘制页面交由系统层进行渲染</span></span><br><span class="line">SharedClient-SharedBufferStack 匿名共享内存(大量数据不适合Bundle)</span><br><span class="line">一个App会跟SurfaceFlinger 创建一个SharedClient </span><br><span class="line">一个SharedClient会有<span class="number">31</span>个ShareBufferStack</span><br><span class="line">Android <span class="number">4.1</span>之前引用双缓冲机制</span><br><span class="line">Android <span class="number">4.1</span>之后使用的三缓冲机制</span><br><span class="line">FPS <span class="number">60</span>(HZ) <span class="number">16</span>ms Android系统中每隔<span class="number">16.6</span>ms会发送一次VSYNC信号有可能会触发UI的渲染</span><br><span class="line">  </span><br><span class="line">  VSYNC(垂直同步)</span><br><span class="line">  Choreorgrapher(调度器/指挥官) </span><br><span class="line">  	<span class="number">1</span>:Callback_input(优先级最高，与输入事件有关)</span><br><span class="line">  	<span class="number">2</span>:Callback_animation(第二优先级，与动画有关)</span><br><span class="line">    <span class="number">3</span>:Callback_traversal(最低优先级，与UI控件绘制有关)</span><br></pre></td></tr></table></figure>
+
+<h1 id="启动优化："><a href="#启动优化：" class="headerlink" title="启动优化："></a>启动优化：</h1><ul>
+<li>冷启动：后台没有该应用的进程，</li>
+<li>热启动：后台存在应用进程，按下home键在启动</li>
+<li>温启动：应用启动后，入口activity被干掉，(比如按下back键)，应用退出了，但是后台还是存在该应用的进程。</li>
+</ul>
+<h2 id="冷启动："><a href="#冷启动：" class="headerlink" title="冷启动："></a>冷启动：</h2><blockquote>
+<p>加载启动的App，</p>
+<p>App启动之后立即展示出一个空白的Window</p>
+<p>创建App的进程，</p>
+<p>创建App对象，</p>
+<p>启动Main Thread</p>
+<p>创建启动的Activity对象，</p>
+<p>加载View，</p>
+<p>布置屏幕</p>
+<p>进行第一次绘制，</p>
+<p>完成第一次绘制后会把Main Activity替换已经展示的Background Window</p>
+</blockquote>
+<h2 id="冷启动优化："><a href="#冷启动优化：" class="headerlink" title="冷启动优化："></a>冷启动优化：</h2><p>优化App启动后立刻展示出一个空白Window：</p>
+<blockquote>
+<p>原因：启动根Activity ActivityStack中startActivityLocked         call showStartingWindow</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//利用提前展示出来的Window，快速展示出一个画面，给用户快速反馈的体验</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span>：设置背景图Theme&lt;---&gt;程序启动快，界面先显示背景图，然后在刷新其他界面控件，给人刷新不同步感觉</span><br><span class="line"><span class="number">2</span>：把样式设置透明&lt;-----&gt;给人程序启动慢的感觉，界面一次性刷新出来，刷新同步</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//避免在启动时做密集沉重的初始化  </span></span><br><span class="line"></span><br><span class="line">四个维度</span><br><span class="line">  <span class="number">1</span>:必要且耗时：启动初始化，考虑用线程来初始化(MultiDex初始化，Tinker初始化)</span><br><span class="line">  <span class="number">2</span>:必要不耗时：首页绘制</span><br><span class="line">  <span class="number">3</span>:非必要耗时：数据上报，插件初识化</span><br><span class="line">  <span class="number">4</span>:非必要不耗时：直接去掉，在需要用的时候在加载，第三方组件初始化</span><br><span class="line">  </span><br><span class="line">思考方向：</span><br><span class="line">  <span class="number">1</span>:分部加载。 以大化小，优先级高的放前</span><br><span class="line">  <span class="number">2</span>:异步加载。 耗时多的异步化</span><br><span class="line">  <span class="number">3</span>:延期加载。 非必要的数据延时加载</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//常见问题：</span></span><br><span class="line">Application onCreate中创建线程池，创建好了，全局使用，但是耗费资源，</span><br><span class="line">Application onCreate中做了大量初识化操作</span><br><span class="line">Application  onCreate函数多次调用 (有几个进程调用几次)</span><br><span class="line">MainActivity网络请求密集 ：接口是否可以合并，</span><br><span class="line">工作线程没有设置优先级</span><br><span class="line">  <span class="number">1</span>:AyncTask - thread_priority_background</span><br><span class="line">  <span class="number">2</span>:AsynsQueryHandler - thread_priority_default</span><br><span class="line">  <span class="number">3</span>:线程池</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//通用启动优化方案</span></span><br><span class="line">	利用主题快速显示界面</span><br><span class="line">  异步初始化组件</span><br><span class="line">  通过梳理业务逻辑，延迟初始化组件、操作</span><br><span class="line">  正确使用线程。 开启一个线程池比单独开个线程耗资源</span><br><span class="line">  去掉无用代码、重复逻辑等</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>java</category>
+        <category>性能优化</category>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>启动优化</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>RecyclerView缓存机制</title>
     <url>/2019/11/20/RecyclerView%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/</url>
     <content><![CDATA[<h1 id="RevyclerView缓存分析"><a href="#RevyclerView缓存分析" class="headerlink" title="RevyclerView缓存分析"></a>RevyclerView缓存分析</h1><ul>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="导航,分享," />
+  <meta name="keywords" content="启动优化," />
 
 
 
@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
-<meta name="keywords" content="导航,分享">
+<meta name="description" content="绘制原理：123456&#x2F;&#x2F;处理数据1:在UI线程处理数据Process.setThreadPriority() 设置优先级2:子线程抢占时间片，导致主线程拿不到时间片3:内存增加导致GC频繁而引起卡顿   内存大 --&amp;gt; GC --&amp;gt; stop the world  123456Android 应用把经过测量、布局、绘制后的surface缓存数据，通过SurfaceFlinger把数据">
+<meta name="keywords" content="启动优化">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http:&#x2F;&#x2F;sglwb.top.com&#x2F;2019&#x2F;11&#x2F;12&#x2F;hello-world&#x2F;index.html">
+<meta property="og:title" content="Android启动优化">
+<meta property="og:url" content="http:&#x2F;&#x2F;sglwb.top.com&#x2F;2019&#x2F;11&#x2F;22&#x2F;Android%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96&#x2F;index.html">
 <meta property="og:site_name" content="稀饭">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="绘制原理：123456&#x2F;&#x2F;处理数据1:在UI线程处理数据Process.setThreadPriority() 设置优先级2:子线程抢占时间片，导致主线程拿不到时间片3:内存增加导致GC频繁而引起卡顿   内存大 --&amp;gt; GC --&amp;gt; stop the world  123456Android 应用把经过测量、布局、绘制后的surface缓存数据，通过SurfaceFlinger把数据">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-18T15:32:21.925Z">
+<meta property="og:updated_time" content="2020-01-30T05:26:44.868Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://sglwb.top.com/2019/11/12/hello-world/"/>
+  <link rel="canonical" href="http://sglwb.top.com/2019/11/22/Android启动优化/"/>
 
 
 
 
 
-  <title>Hello World | 稀饭</title>
+  <title>Android启动优化 | 稀饭</title>
   
 
 
@@ -296,7 +296,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://sglwb.top.com/2019/11/12/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://sglwb.top.com/2019/11/22/Android%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wenbo Li">
@@ -313,7 +313,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World</h1>
+          <h1 class="post-title" itemprop="name headline">Android启动优化</h1>
         
 
         <div class="post-meta">
@@ -325,8 +325,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-12T22:43:46+08:00">
-                2019-11-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T13:19:34+08:00">
+                2019-11-22
               </time>
             
 
@@ -355,6 +355,28 @@
 
                 
                 
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" itemprop="url" rel="index">
+                    <span itemprop="name">性能优化</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
               
             </span>
           
@@ -366,8 +388,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/11/12/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/11/12/hello-world/" itemprop="commentCount"></span>
+                <a href="/2019/11/22/Android%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/11/22/Android%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -400,19 +422,45 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+        <h1 id="绘制原理："><a href="#绘制原理：" class="headerlink" title="绘制原理："></a>绘制原理：</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//处理数据</span></span><br><span class="line"><span class="number">1</span>:在UI线程处理数据</span><br><span class="line">Process.setThreadPriority() 设置优先级</span><br><span class="line"><span class="number">2</span>:子线程抢占时间片，导致主线程拿不到时间片</span><br><span class="line"><span class="number">3</span>:内存增加导致GC频繁而引起卡顿</span><br><span class="line">   内存大 --&gt; GC --&gt; stop the world</span><br></pre></td></tr></table></figure>
 
-<p>More info:<a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing.js</a></p>
-<h3 id="Run-server-Writing-js"><a href="#Run-server-Writing-js" class="headerlink" title="Run server Writing.js"></a>Run server <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing.js</a></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Android 应用把经过测量、布局、绘制后的surface缓存数据，通过SurfaceFlinger把数据渲染到显示屏幕上，通过Android的刷新机制来刷新绘制。</span><br><span class="line">  </span><br><span class="line">  <span class="number">1</span>:应用层负责绘制</span><br><span class="line">  <span class="number">2</span>:系统层负责渲染</span><br><span class="line">  <span class="number">3</span>:c/s架构</span><br><span class="line">  <span class="number">4</span>:SurfaceFlinger(C++)</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate <code>static</code> files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">应用层：</span><br><span class="line">  Measure：深度优化</span><br><span class="line">  Layout： 深度优化</span><br><span class="line">  Draw:</span><br><span class="line">    软件绘制</span><br><span class="line">    硬件加速(GPU)</span><br><span class="line">      比CPU耗电</span><br><span class="line">      兼容问题(不是所有API都支持硬件加速)</span><br><span class="line">      内存大</span><br><span class="line">    </span><br><span class="line"> Bitmap() 有回收机制，开启硬件加速后不存在回收</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 系统层：</span></span><br><span class="line"><span class="number">1</span>:相应客户端事件，创建Layer与客户端的Surface建立联系</span><br><span class="line"><span class="number">2</span>:接收客户端数据及属性，修改Layer属性，比如尺寸、颜色、透明度等</span><br><span class="line"><span class="number">3</span>:将创建的Layer内容刷新到屏幕上</span><br><span class="line"><span class="number">4</span>:维持Layer的序列，并对Layer最终输出作出裁剪计算</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">view 无限大的，屏幕大小有限</span><br><span class="line"><span class="comment">// 应用层绘制页面交由系统层进行渲染</span></span><br><span class="line">SharedClient-SharedBufferStack 匿名共享内存(大量数据不适合Bundle)</span><br><span class="line">一个App会跟SurfaceFlinger 创建一个SharedClient </span><br><span class="line">一个SharedClient会有<span class="number">31</span>个ShareBufferStack</span><br><span class="line">Android <span class="number">4.1</span>之前引用双缓冲机制</span><br><span class="line">Android <span class="number">4.1</span>之后使用的三缓冲机制</span><br><span class="line">FPS <span class="number">60</span>(HZ) <span class="number">16</span>ms Android系统中每隔<span class="number">16.6</span>ms会发送一次VSYNC信号有可能会触发UI的渲染</span><br><span class="line">  </span><br><span class="line">  VSYNC(垂直同步)</span><br><span class="line">  Choreorgrapher(调度器/指挥官) </span><br><span class="line">  	<span class="number">1</span>:Callback_input(优先级最高，与输入事件有关)</span><br><span class="line">  	<span class="number">2</span>:Callback_animation(第二优先级，与动画有关)</span><br><span class="line">    <span class="number">3</span>:Callback_traversal(最低优先级，与UI控件绘制有关)</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<h1 id="启动优化："><a href="#启动优化：" class="headerlink" title="启动优化："></a>启动优化：</h1><ul>
+<li>冷启动：后台没有该应用的进程，</li>
+<li>热启动：后台存在应用进程，按下home键在启动</li>
+<li>温启动：应用启动后，入口activity被干掉，(比如按下back键)，应用退出了，但是后台还是存在该应用的进程。</li>
+</ul>
+<h2 id="冷启动："><a href="#冷启动：" class="headerlink" title="冷启动："></a>冷启动：</h2><blockquote>
+<p>加载启动的App，</p>
+<p>App启动之后立即展示出一个空白的Window</p>
+<p>创建App的进程，</p>
+<p>创建App对象，</p>
+<p>启动Main Thread</p>
+<p>创建启动的Activity对象，</p>
+<p>加载View，</p>
+<p>布置屏幕</p>
+<p>进行第一次绘制，</p>
+<p>完成第一次绘制后会把Main Activity替换已经展示的Background Window</p>
+</blockquote>
+<h2 id="冷启动优化："><a href="#冷启动优化：" class="headerlink" title="冷启动优化："></a>冷启动优化：</h2><p>优化App启动后立刻展示出一个空白Window：</p>
+<blockquote>
+<p>原因：启动根Activity ActivityStack中startActivityLocked         call showStartingWindow</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//利用提前展示出来的Window，快速展示出一个画面，给用户快速反馈的体验</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span>：设置背景图Theme&lt;---&gt;程序启动快，界面先显示背景图，然后在刷新其他界面控件，给人刷新不同步感觉</span><br><span class="line"><span class="number">2</span>：把样式设置透明&lt;-----&gt;给人程序启动慢的感觉，界面一次性刷新出来，刷新同步</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//避免在启动时做密集沉重的初始化  </span></span><br><span class="line"></span><br><span class="line">四个维度</span><br><span class="line">  <span class="number">1</span>:必要且耗时：启动初始化，考虑用线程来初始化(MultiDex初始化，Tinker初始化)</span><br><span class="line">  <span class="number">2</span>:必要不耗时：首页绘制</span><br><span class="line">  <span class="number">3</span>:非必要耗时：数据上报，插件初识化</span><br><span class="line">  <span class="number">4</span>:非必要不耗时：直接去掉，在需要用的时候在加载，第三方组件初始化</span><br><span class="line">  </span><br><span class="line">思考方向：</span><br><span class="line">  <span class="number">1</span>:分部加载。 以大化小，优先级高的放前</span><br><span class="line">  <span class="number">2</span>:异步加载。 耗时多的异步化</span><br><span class="line">  <span class="number">3</span>:延期加载。 非必要的数据延时加载</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//常见问题：</span></span><br><span class="line">Application onCreate中创建线程池，创建好了，全局使用，但是耗费资源，</span><br><span class="line">Application onCreate中做了大量初识化操作</span><br><span class="line">Application  onCreate函数多次调用 (有几个进程调用几次)</span><br><span class="line">MainActivity网络请求密集 ：接口是否可以合并，</span><br><span class="line">工作线程没有设置优先级</span><br><span class="line">  <span class="number">1</span>:AyncTask - thread_priority_background</span><br><span class="line">  <span class="number">2</span>:AsynsQueryHandler - thread_priority_default</span><br><span class="line">  <span class="number">3</span>:线程池</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通用启动优化方案</span></span><br><span class="line">	利用主题快速显示界面</span><br><span class="line">  异步初始化组件</span><br><span class="line">  通过梳理业务逻辑，延迟初始化组件、操作</span><br><span class="line">  正确使用线程。 开启一个线程池比单独开个线程耗资源</span><br><span class="line">  去掉无用代码、重复逻辑等</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -467,9 +515,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%AF%BC%E8%88%AA/" rel="tag"><i class="fa fa-google"></i> 导航</a>
-          
-            <a href="/tags/%E5%88%86%E4%BA%AB/" rel="tag"><i class="fa fa-google"></i> 分享</a>
+            <a href="/tags/%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/" rel="tag"><i class="fa fa-google"></i> 启动优化</a>
           
         </div>
       
@@ -482,15 +528,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/11/20/RecyclerView%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" rel="next" title="RecyclerView缓存机制">
+                <i class="fa fa-chevron-left"></i> RecyclerView缓存机制
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/17/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" rel="prev" title="hexo博客搭建">
-                hexo博客搭建 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -695,7 +741,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server-Writing-js"><span class="nav-number">1.2.</span> <span class="nav-text">Run server Writing.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#绘制原理："><span class="nav-number">1.</span> <span class="nav-text">绘制原理：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动优化："><span class="nav-number">2.</span> <span class="nav-text">启动优化：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#冷启动："><span class="nav-number">2.1.</span> <span class="nav-text">冷启动：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#冷启动优化："><span class="nav-number">2.2.</span> <span class="nav-text">冷启动优化：</span></a></li></ol></li></ol></div>
             
 
           </div>
