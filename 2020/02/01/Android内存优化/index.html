@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="启动优化," />
+  <meta name="keywords" content="内存优化,GC垃圾回收,JVM,MAT," />
 
 
 
@@ -79,16 +79,20 @@
 
 
 
-<meta name="description" content="绘制原理：123456&#x2F;&#x2F;处理数据1:在UI线程处理数据Process.setThreadPriority() 设置优先级2:子线程抢占时间片，导致主线程拿不到时间片3:内存增加导致GC频繁而引起卡顿   内存大 --&amp;gt; GC --&amp;gt; stop the world  123456Android 应用把经过测量、布局、绘制后的surface缓存数据，通过SurfaceFlinger把数据">
-<meta name="keywords" content="启动优化">
+<meta name="description" content="帧动画：消耗资源最多 Systrace1234功能：  分析UI卡顿问题	app启动流程  分析。锁功能  内存内存抖动：短时间内大量对象创建，它伴随频繁的GC 12345678910111213var str = &quot;&quot;for (index in 1..100) &amp;#123;  str+=index&amp;#125;&#x2F;&#x2F;String是不可变对象，即对象一旦生成，就不能被更改。对String对象的改变会引">
+<meta name="keywords" content="内存优化,GC垃圾回收,JVM,MAT">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android启动优化">
-<meta property="og:url" content="http:&#x2F;&#x2F;sglwb.top.com&#x2F;2019&#x2F;11&#x2F;22&#x2F;Android%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96&#x2F;index.html">
+<meta property="og:title" content="Android内存优化">
+<meta property="og:url" content="http:&#x2F;&#x2F;sglwb.top.com&#x2F;2020&#x2F;02&#x2F;01&#x2F;Android%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96&#x2F;index.html">
 <meta property="og:site_name" content="稀饭">
-<meta property="og:description" content="绘制原理：123456&#x2F;&#x2F;处理数据1:在UI线程处理数据Process.setThreadPriority() 设置优先级2:子线程抢占时间片，导致主线程拿不到时间片3:内存增加导致GC频繁而引起卡顿   内存大 --&amp;gt; GC --&amp;gt; stop the world  123456Android 应用把经过测量、布局、绘制后的surface缓存数据，通过SurfaceFlinger把数据">
+<meta property="og:description" content="帧动画：消耗资源最多 Systrace1234功能：  分析UI卡顿问题	app启动流程  分析。锁功能  内存内存抖动：短时间内大量对象创建，它伴随频繁的GC 12345678910111213var str = &quot;&quot;for (index in 1..100) &amp;#123;  str+=index&amp;#125;&#x2F;&#x2F;String是不可变对象，即对象一旦生成，就不能被更改。对String对象的改变会引">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-30T05:26:44.868Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;sglwb.top.com&#x2F;2020&#x2F;02&#x2F;01&#x2F;Android%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96&#x2F;GCRoots.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;sglwb.top.com&#x2F;2020&#x2F;02&#x2F;01&#x2F;Android%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96&#x2F;profile图解.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;sglwb.top.com&#x2F;2020&#x2F;02&#x2F;01&#x2F;Android%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96&#x2F;proflie3.png">
+<meta property="og:updated_time" content="2020-02-01T13:18:55.361Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;sglwb.top.com&#x2F;2020&#x2F;02&#x2F;01&#x2F;Android%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96&#x2F;GCRoots.png">
 
 
 
@@ -118,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://sglwb.top.com/2019/11/22/Android启动优化/"/>
+  <link rel="canonical" href="http://sglwb.top.com/2020/02/01/Android内存优化/"/>
 
 
 
 
 
-  <title>Android启动优化 | 稀饭</title>
+  <title>Android内存优化 | 稀饭</title>
   
 
 
@@ -296,7 +300,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://sglwb.top.com/2019/11/22/Android%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="http://sglwb.top.com/2020/02/01/Android%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wenbo Li">
@@ -313,7 +317,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android启动优化</h1>
+          <h1 class="post-title" itemprop="name headline">Android内存优化</h1>
         
 
         <div class="post-meta">
@@ -325,8 +329,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T13:19:34+08:00">
-                2019-11-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-01T21:13:54+08:00">
+                2020-02-01
               </time>
             
 
@@ -359,8 +363,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" itemprop="url" rel="index">
-                    <span itemprop="name">性能优化</span>
+                  <a href="/categories/java/%E5%86%85%E5%AD%98/" itemprop="url" rel="index">
+                    <span itemprop="name">内存</span>
                   </a>
                 </span>
 
@@ -370,8 +374,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
+                  <a href="/categories/java/%E5%86%85%E5%AD%98/MAT/" itemprop="url" rel="index">
+                    <span itemprop="name">MAT</span>
                   </a>
                 </span>
 
@@ -388,8 +392,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/11/22/Android%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/11/22/Android%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/" itemprop="commentCount"></span>
+                <a href="/2020/02/01/Android%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/02/01/Android%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -422,45 +426,75 @@
       
 
       
-        <h1 id="绘制原理："><a href="#绘制原理：" class="headerlink" title="绘制原理："></a>绘制原理：</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//处理数据</span></span><br><span class="line"><span class="number">1</span>:在UI线程处理数据</span><br><span class="line">Process.setThreadPriority() 设置优先级</span><br><span class="line"><span class="number">2</span>:子线程抢占时间片，导致主线程拿不到时间片</span><br><span class="line"><span class="number">3</span>:内存增加导致GC频繁而引起卡顿</span><br><span class="line">   内存大 --&gt; GC --&gt; stop the world</span><br></pre></td></tr></table></figure>
+        <p>帧动画：消耗资源最多</p>
+<h2 id="Systrace"><a href="#Systrace" class="headerlink" title="Systrace"></a>Systrace</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">功能：</span><br><span class="line">  分析UI卡顿问题</span><br><span class="line">	app启动流程</span><br><span class="line">  分析。锁功能</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Android 应用把经过测量、布局、绘制后的surface缓存数据，通过SurfaceFlinger把数据渲染到显示屏幕上，通过Android的刷新机制来刷新绘制。</span><br><span class="line">  </span><br><span class="line">  <span class="number">1</span>:应用层负责绘制</span><br><span class="line">  <span class="number">2</span>:系统层负责渲染</span><br><span class="line">  <span class="number">3</span>:c/s架构</span><br><span class="line">  <span class="number">4</span>:SurfaceFlinger(C++)</span><br></pre></td></tr></table></figure>
+<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><p>内存抖动：短时间内大量对象创建，它伴随频繁的GC</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">""</span></span><br><span class="line"><span class="keyword">for</span> (index <span class="keyword">in</span> <span class="number">1</span>..<span class="number">100</span>) &#123;</span><br><span class="line">  str+=index</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//String是不可变对象，即对象一旦生成，就不能被更改。对String对象的改变会引发新的String对象的生成,执</span></span><br><span class="line"><span class="comment">//行以下代码实际上是生成了一个新的String对象。然后让引用指向新的String对象。所以内容经常改变的字符串</span></span><br><span class="line"><span class="comment">//不要使用String类型，由于这样会造成内存中大量的无引用对象，然后JVM的GC就会开始工作。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">StringBuffer <span class="comment">//每次都对对象本身进行操作，而不是生成新的对象。</span></span><br><span class="line">StringBuild <span class="comment">//是JDK1.5新增加的一个类，与StringBuffer具有相同的操作。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//区别在于：StringBuffer是线程安全的类。StringBuild不是线程安全的类，在单线程中性能要比StringBuffrer高。</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">应用层：</span><br><span class="line">  Measure：深度优化</span><br><span class="line">  Layout： 深度优化</span><br><span class="line">  Draw:</span><br><span class="line">    软件绘制</span><br><span class="line">    硬件加速(GPU)</span><br><span class="line">      比CPU耗电</span><br><span class="line">      兼容问题(不是所有API都支持硬件加速)</span><br><span class="line">      内存大</span><br><span class="line">    </span><br><span class="line"> Bitmap() 有回收机制，开启硬件加速后不存在回收</span><br></pre></td></tr></table></figure>
+<p>内存抖动：频繁的GC导致线程挂起，程序阻塞，从而形成卡顿</p>
+<p>OOM：内存不连续，内存碎片，</p>
+<h1 id="内存抖动"><a href="#内存抖动" class="headerlink" title="内存抖动"></a>内存抖动</h1><p>Profile as自带的工具，</p>
+<p>FinalizeRefrence ：内存回收的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//避免抖动：</span></span><br><span class="line"><span class="number">1</span>:避免在循环中创建对象； 如字符串拼接</span><br><span class="line"><span class="number">2</span>:避免在频繁调用的方法中创建对象，如View的onDraw方法</span><br><span class="line"><span class="number">3</span>:允许复用的情况下，使用对象池进行缓存，如Handler的Message单链表(obtain)</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 系统层：</span></span><br><span class="line"><span class="number">1</span>:相应客户端事件，创建Layer与客户端的Surface建立联系</span><br><span class="line"><span class="number">2</span>:接收客户端数据及属性，修改Layer属性，比如尺寸、颜色、透明度等</span><br><span class="line"><span class="number">3</span>:将创建的Layer内容刷新到屏幕上</span><br><span class="line"><span class="number">4</span>:维持Layer的序列，并对Layer最终输出作出裁剪计算</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">view 无限大的，屏幕大小有限</span><br><span class="line"><span class="comment">// 应用层绘制页面交由系统层进行渲染</span></span><br><span class="line">SharedClient-SharedBufferStack 匿名共享内存(大量数据不适合Bundle)</span><br><span class="line">一个App会跟SurfaceFlinger 创建一个SharedClient </span><br><span class="line">一个SharedClient会有<span class="number">31</span>个ShareBufferStack</span><br><span class="line">Android <span class="number">4.1</span>之前引用双缓冲机制</span><br><span class="line">Android <span class="number">4.1</span>之后使用的三缓冲机制</span><br><span class="line">FPS <span class="number">60</span>(HZ) <span class="number">16</span>ms Android系统中每隔<span class="number">16.6</span>ms会发送一次VSYNC信号有可能会触发UI的渲染</span><br><span class="line">  </span><br><span class="line">  VSYNC(垂直同步)</span><br><span class="line">  Choreorgrapher(调度器/指挥官) </span><br><span class="line">  	<span class="number">1</span>:Callback_input(优先级最高，与输入事件有关)</span><br><span class="line">  	<span class="number">2</span>:Callback_animation(第二优先级，与动画有关)</span><br><span class="line">    <span class="number">3</span>:Callback_traversal(最低优先级，与UI控件绘制有关)</span><br></pre></td></tr></table></figure>
+<h1 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">程序中已动态分配的堆内存由于某种程序未释放或者无法释放，造成系统内存的浪费。</span><br><span class="line">长生命周期对象持有短生命周期对象强引用，从而导致短生命周期对象无法被回收。</span><br></pre></td></tr></table></figure>
 
-<h1 id="启动优化："><a href="#启动优化：" class="headerlink" title="启动优化："></a>启动优化：</h1><ul>
-<li>冷启动：后台没有该应用的进程，</li>
-<li>热启动：后台存在应用进程，按下home键在启动</li>
-<li>温启动：应用启动后，入口activity被干掉，(比如按下back键)，应用退出了，但是后台还是存在该应用的进程。</li>
-</ul>
-<h2 id="冷启动："><a href="#冷启动：" class="headerlink" title="冷启动："></a>冷启动：</h2><blockquote>
-<p>加载启动的App，</p>
-<p>App启动之后立即展示出一个空白的Window</p>
-<p>创建App的进程，</p>
-<p>创建App对象，</p>
-<p>启动Main Thread</p>
-<p>创建启动的Activity对象，</p>
-<p>加载View，</p>
-<p>布置屏幕</p>
-<p>进行第一次绘制，</p>
-<p>完成第一次绘制后会把Main Activity替换已经展示的Background Window</p>
-</blockquote>
-<h2 id="冷启动优化："><a href="#冷启动优化：" class="headerlink" title="冷启动优化："></a>冷启动优化：</h2><p>优化App启动后立刻展示出一个空白Window：</p>
 <blockquote>
-<p>原因：启动根Activity ActivityStack中startActivityLocked         call showStartingWindow</p>
+<p>可达性分析法：判断对象是否可以被GC</p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//利用提前展示出来的Window，快速展示出一个画面，给用户快速反馈的体验</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span>：设置背景图Theme&lt;---&gt;程序启动快，界面先显示背景图，然后在刷新其他界面控件，给人刷新不同步感觉</span><br><span class="line"><span class="number">2</span>：把样式设置透明&lt;-----&gt;给人程序启动慢的感觉，界面一次性刷新出来，刷新同步</span><br></pre></td></tr></table></figure>
+<img src="GCRoots.png" style="zoom:50%;" />
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//避免在启动时做密集沉重的初始化  </span></span><br><span class="line"></span><br><span class="line">四个维度</span><br><span class="line">  <span class="number">1</span>:必要且耗时：启动初始化，考虑用线程来初始化(MultiDex初始化，Tinker初始化)</span><br><span class="line">  <span class="number">2</span>:必要不耗时：首页绘制</span><br><span class="line">  <span class="number">3</span>:非必要耗时：数据上报，插件初识化</span><br><span class="line">  <span class="number">4</span>:非必要不耗时：直接去掉，在需要用的时候在加载，第三方组件初始化</span><br><span class="line">  </span><br><span class="line">思考方向：</span><br><span class="line">  <span class="number">1</span>:分部加载。 以大化小，优先级高的放前</span><br><span class="line">  <span class="number">2</span>:异步加载。 耗时多的异步化</span><br><span class="line">  <span class="number">3</span>:延期加载。 非必要的数据延时加载</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//常见问题：</span></span><br><span class="line">Application onCreate中创建线程池，创建好了，全局使用，但是耗费资源，</span><br><span class="line">Application onCreate中做了大量初识化操作</span><br><span class="line">Application  onCreate函数多次调用 (有几个进程调用几次)</span><br><span class="line">MainActivity网络请求密集 ：接口是否可以合并，</span><br><span class="line">工作线程没有设置优先级</span><br><span class="line">  <span class="number">1</span>:AyncTask - thread_priority_background</span><br><span class="line">  <span class="number">2</span>:AsynsQueryHandler - thread_priority_default</span><br><span class="line">  <span class="number">3</span>:线程池</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">通过一些列称为“GC Roots”的对象为起始点，从这些节点向下搜索，搜索所有的引用链，</span><br><span class="line">当一个对象到”GC Roots“没有任何引用链(即GC Roots到对象不可达)时，则证明次对象时不可用的。</span><br><span class="line"></span><br><span class="line"><span class="comment">//static final可以看作一个GC Roots</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String str = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//static 生命周期跟app生命周期一样</span></span><br></pre></td></tr></table></figure>
 
 
+<p>引用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">强引用：JVM 宁可抛出 OOM ，也不会让 GC 回收具有强引用的对象</span><br><span class="line"> 软引用：定义一些还有用但并非必须的对象。对于引用关联的对象，GC不会直接回收，而是系统将要内存溢出之前才会触发GC将这些对象进行回收。</span><br><span class="line"> 弱引用：同样定义非必须对象，被弱引用关联，在GC执行时会被直接回收。</span><br><span class="line"> 虚引用：正如其名，对一个对象而言，这个引用形同虚设，有和没有一样</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通用启动优化方案</span></span><br><span class="line">	利用主题快速显示界面</span><br><span class="line">  异步初始化组件</span><br><span class="line">  通过梳理业务逻辑，延迟初始化组件、操作</span><br><span class="line">  正确使用线程。 开启一个线程池比单独开个线程耗资源</span><br><span class="line">  去掉无用代码、重复逻辑等</span><br></pre></td></tr></table></figure>
 
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 软引用</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="keyword">var</span> softObject: Object? = <span class="literal">null</span></span><br><span class="line">softObject = Object()</span><br><span class="line"><span class="keyword">val</span> sf: SoftReference&lt;Object&gt; = SoftReference&lt;Object&gt;(softObject)</span><br><span class="line">println(<span class="string">"soft<span class="subst">$&#123;sf.get()&#125;</span>"</span>)</span><br><span class="line">softObject = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">System.gc()</span><br><span class="line">println(<span class="string">"soft<span class="subst">$&#123;sf.get()&#125;</span>"</span>)</span><br><span class="line">println(<span class="string">"====================="</span>)</span><br><span class="line"></span><br><span class="line">打印结果：</span><br><span class="line">softjava.lang.<span class="symbol">Object@</span><span class="number">33</span>c7353a</span><br><span class="line">softjava.lang.<span class="symbol">Object@</span><span class="number">33</span>c7353a</span><br><span class="line">=====================</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 弱引用</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="keyword">var</span> weakObject: Object? = <span class="literal">null</span></span><br><span class="line">weakObject = Object()</span><br><span class="line"><span class="keyword">val</span> weakReference = WeakReference&lt;Object&gt;(weakObject)</span><br><span class="line">println(<span class="string">"weak+++<span class="subst">$&#123;weakReference.get()&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">weakObject=<span class="literal">null</span></span><br><span class="line">System.gc()</span><br><span class="line">println(<span class="string">"weak+++<span class="subst">$&#123;weakReference.get()&#125;</span>"</span>)</span><br><span class="line">println(<span class="string">"====================="</span>)</span><br><span class="line"></span><br><span class="line">打印结果：</span><br><span class="line">weak+++java.lang.<span class="symbol">Object@</span><span class="number">681</span>a9515</span><br><span class="line">weak+++<span class="literal">null</span></span><br><span class="line">=====================</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><strong>场景：Handler发送一个延迟消息</strong>，</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestActivity</span> : <span class="type">AppCompatActivity</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> mHandler = Handler()</span><br><span class="line">    <span class="keyword">val</span> i: <span class="built_in">Int</span> = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">        setContentView(R.layout.activity_test)</span><br><span class="line"></span><br><span class="line">        mHandler.postDelayed(&#123;</span><br><span class="line">            <span class="comment">//创建内部类，持有外部类的引用</span></span><br><span class="line">            println(i)</span><br><span class="line">        &#125;, <span class="number">1000</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 解决持有内部类持有外部类的方法之一</span></span><br><span class="line"><span class="comment">     * 手动清楚</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onDestroy</span><span class="params">()</span></span> &#123;</span><br><span class="line">        mHandler.removeCallbacksAndMessages(<span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">super</span>.onDestroy()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>将非静态内部类转为静态内部类 + WeakReference（弱引用）的方式</strong></p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestActivity</span> : <span class="type">AppCompatActivity</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> mHandler = Handler()</span><br><span class="line">    <span class="keyword">val</span> i: <span class="built_in">Int</span> = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * kotlin中所有内部类都是静态类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">AA</span> : <span class="type">Runnable &#123;</span></span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 若想访问外部类的属性</span></span><br><span class="line"><span class="comment">         * 可以使用构造的方式</span></span><br><span class="line"><span class="comment">         * 直接用同样会造成长生命周期持有短生命周期引用，导致无法销毁，造成内存泄漏</span></span><br><span class="line"><span class="comment">         * 使用若引用-这样就会在执行GC时就给清理掉，</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">val</span> weakAtRef: WeakReference&lt;TestActivity&gt;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">constructor</span>(activity: TestActivity) &#123;</span><br><span class="line">            weakAtRef = WeakReference&lt;TestActivity&gt;(activity)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">run</span><span class="params">()</span></span> &#123;</span><br><span class="line">            <span class="comment">//无法访问外部类属性</span></span><br><span class="line"><span class="comment">//            println(i)</span></span><br><span class="line">            println(weakAtRef.<span class="keyword">get</span>()?.i)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">        setContentView(R.layout.activity_test)</span><br><span class="line">        mHandler.postDelayed(AA(<span class="keyword">this</span>), <span class="number">1000</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="4">
+<li><strong>如何避免内存泄漏</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">1:不要在匿名内部类中进行异步操作</span><br><span class="line">2:将非静态内部类转为静态内部类 + WeakReference（弱引用）的方式</span><br><span class="line">3:在 Activity 回调 onDestroy 时或者 onStop 时</span><br><span class="line">  移除消息队列 MessageQueue 中的消息</span><br><span class="line">  静态变量置null</span><br><span class="line">  停止异步任务</span><br><span class="line">  取消注册</span><br><span class="line">4:使用Context时，尽量使用Application 的 Context</span><br><span class="line">5:尽量避免使用static 成员变量。另外可以考虑lazy初始化</span><br><span class="line">6:为webView开启另外一个进程，通过AIDL与主线程进行通信，WebView所在的进程可以根据业务的需要选择合适</span><br><span class="line">	的时机进行销毁，从而达到内存的完整释放</span><br><span class="line">7:及时关闭资源。Bitmap 使用后调用recycle()方法</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Profile工具使用"><a href="#Profile工具使用" class="headerlink" title="Profile工具使用"></a>Profile工具使用</h1><img src="profile图解.png" style="zoom:50%;" />
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">如上图所示，内存分析器的默认视图包括以下内容：</span><br><span class="line"></span><br><span class="line">① 强制执行垃圾收集事件的按钮。</span><br><span class="line">② 捕获堆转储的按钮。</span><br><span class="line">③ 记录内存分配的按钮。</span><br><span class="line">④ 放大时间线的按钮。</span><br><span class="line">⑤ 跳转到实时内存数据的按钮。</span><br><span class="line">⑥ 事件时间线显示活动状态、用户输入事件和屏幕旋转事件。</span><br><span class="line">⑦ 内存使用时间表，其中包括以下内容：</span><br><span class="line">    每个内存类别使用多少内存的堆栈图，如左边的y轴和顶部的颜色键所示。</span><br><span class="line">    虚线表示已分配对象的数量，如右侧y轴所示。</span><br><span class="line">    每个垃圾收集事件的图标。</span><br></pre></td></tr></table></figure>
+
+
+<img src="proflie3.png" style="zoom:50%;" />
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">导出文件的格式为:    </span><br><span class="line">	.hprof ,但是要转换为MAT能识别的格式，需要用到Android SDK下platform-tools的hprof-conv</span><br><span class="line">  </span><br><span class="line">命令：hprof-conv &lt;FileName&gt; &lt;newFileName&gt;.hprof</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>MAT</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">一个基于Eclipse的内存分析工具，是一个快速、功能丰富的JAVA heap分析工具，它可以帮助我们查找内存泄漏和</span><br><span class="line">减少内存消耗。使用内存分析工具从众多的对象中进行分析，快速的计算出在内存中对象的占用大小，看看是谁阻止</span><br><span class="line">了垃圾收集器的回收工作，并可以通过报表直观的查看到可能造成这种结果的对象</span><br></pre></td></tr></table></figure>
+
+
+
+<p><a href="https://www.cnblogs.com/larack/p/6071209.html" target="_blank" rel="noopener">这里就不一一记录了，直接放上一个个人感觉比较好的教程</a></p>
 
       
     </div>
@@ -515,7 +549,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/" rel="tag"><i class="fa fa-google"></i> 启动优化</a>
+            <a href="/tags/%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/" rel="tag"><i class="fa fa-google"></i> 内存优化</a>
+          
+            <a href="/tags/GC%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag"><i class="fa fa-google"></i> GC垃圾回收</a>
+          
+            <a href="/tags/JVM/" rel="tag"><i class="fa fa-google"></i> JVM</a>
+          
+            <a href="/tags/MAT/" rel="tag"><i class="fa fa-google"></i> MAT</a>
           
         </div>
       
@@ -528,8 +568,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/20/RecyclerView%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" rel="next" title="RecyclerView缓存机制">
-                <i class="fa fa-chevron-left"></i> RecyclerView缓存机制
+              <a href="/2019/11/22/Android%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/" rel="next" title="Android启动优化">
+                <i class="fa fa-chevron-left"></i> Android启动优化
               </a>
             
           </div>
@@ -537,10 +577,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/01/Android%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/" rel="prev" title="Android内存优化">
-                Android内存优化 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -745,7 +781,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#绘制原理："><span class="nav-number">1.</span> <span class="nav-text">绘制原理：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动优化："><span class="nav-number">2.</span> <span class="nav-text">启动优化：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#冷启动："><span class="nav-number">2.1.</span> <span class="nav-text">冷启动：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#冷启动优化："><span class="nav-number">2.2.</span> <span class="nav-text">冷启动优化：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Systrace"><span class="nav-number">1.</span> <span class="nav-text">Systrace</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存"><span class="nav-number"></span> <span class="nav-text">内存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存抖动"><span class="nav-number"></span> <span class="nav-text">内存抖动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存泄漏"><span class="nav-number"></span> <span class="nav-text">内存泄漏</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Profile工具使用"><span class="nav-number"></span> <span class="nav-text">Profile工具使用</span></a></div>
             
 
           </div>
