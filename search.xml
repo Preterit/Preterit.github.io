@@ -1,6 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Bitmap内存管理</title>
+    <url>/2020/02/09/Bitmap%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h1 id="Bitmap内存管理"><a href="#Bitmap内存管理" class="headerlink" title="Bitmap内存管理"></a>Bitmap内存管理</h1><blockquote>
+<p>Android中图片是以bitmap形式存在的，那么bitmap所占内存，直接影响到了应用所占内存大小，首先要知道bitmap所占内存大小计算方式：</p>
+<p>图片长度 x 图片宽度 x 一个像素点占用的字节数</p>
+</blockquote>
+<p><strong>像素格式：</strong></p>
+<p><strong>ARGB_8888:</strong> ARGB 各占8位，内存为 Width * Height * 4</p>
+<p><strong>RGB565:</strong> R 5位，G 6位 ，B 5位，内存 Width * Height *2</p>
+<p><strong>Bitmap存储位置变迁：</strong> </p>
+<ul>
+<li><p>android 3.0 以前的版本Bitmap对象的内存是在native层分配的，不会占用java的内存。</p>
+</li>
+<li><p>Android 3.0 之后 Bitmap对象的内存统一交由jvm进行分配。方便内存管理。</p>
+</li>
+<li><p>而Android 8.0 之后的版本，Bitmap对象的内存又交给native管理。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">如果在jvm中，在GC是会自动调用bitmap.recycle()</span><br><span class="line">如果在<span class="keyword">native</span>中，GC时不会自动触发bitmap.recycle()，</span><br><span class="line"></span><br><span class="line">使用引用队列：Set&lt;WeakReference&lt;Bitmap&gt;&gt;</span><br><span class="line">当jvm GC扫过 当引用的对象将要被JVM回收时，会将其加入到引用队列中。</span><br><span class="line">  </span><br><span class="line">Bitmap使用不当造成内存溢出：创建Bitmap对象的时候申请的内存高于App所拥有的最大内存</span><br></pre></td></tr></table></figure>
+
+<h2 id="图片压缩："><a href="#图片压缩：" class="headerlink" title="图片压缩："></a>图片压缩：</h2><h3 id="质量压缩"><a href="#质量压缩" class="headerlink" title="质量压缩"></a>质量压缩</h3><blockquote>
+<p>图片的大小是没有变的，因为质量压缩不会减少图片的像素，它是在保持像素的前提下改变图片的位深及透明度等，来达到压缩图片的目的，这也是为什么该方法叫质量压缩方法。</p>
+</blockquote>
+<p><strong>Bitmap.compress(Bitmap.CompressFormat.PNG, quality, outStream)</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 参数一：Bitmap.CompressFormat format 图像的压缩格式；</span></span><br><span class="line"><span class="comment"> * 参数二：int quality 图像压缩率，0-100。 0 压缩100%，100意味着不压缩；</span></span><br><span class="line"><span class="comment"> * 参数三：OutputStream stream 写入压缩数据的输出流；</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>说明：</strong></p>
+<ul>
+<li>使用该方法压缩图片，不能改变图片的宽高，每个像素的大小也不会改变，所以图片在内存的大小也不会改变。</li>
+<li>第二参数是压缩比重，图片存储在磁盘上的大小会根据这个值改变，值越小占用磁盘的内存也小。</li>
+<li>第一个参数，图片的格式，如果是.png格式,图片大小不会改变，因为png图片是无损。</li>
+</ul>
+<h3 id="采样率压缩"><a href="#采样率压缩" class="headerlink" title="采样率压缩"></a>采样率压缩</h3><p><strong>inSampleSize/inJustDecodeBounds</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> options = newBitmapFactory.Options();</span><br><span class="line">options.inJustDecodeBounds = <span class="keyword">true</span>;</span><br><span class="line">options.inSampleSize = <span class="number">2</span>;</span><br><span class="line">options.inJustDecodeBounds = <span class="keyword">false</span>;</span><br><span class="line">bm = BitmapFactory.decodeFile(Environment</span><br><span class="line">.getExternalStorageDirectory().getAbsolutePath() + <span class="string">"/DCIM/Camera/test.jpg"</span>, options);</span><br><span class="line"></span><br><span class="line"><span class="comment">//通过设置inSampleSize方式来改变图片的宽高，如果设置成2，则宽和高都为原来的1/2。</span></span><br><span class="line"><span class="comment">//Tips:采样率一般为 2 的指数，如 1、2、4、8、16 等等，如果不为 2 的指数会向下取整。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>获取采样率的方法和步骤：</strong></p>
+<ul>
+<li>将 BitmapFactory.Options 的 <strong>inJustDecodeBounds</strong> 参数设置为 true；</li>
+<li>从 BitmapFactory.Options 中取出图片的原始宽高信息，也就是 <strong>outWidth 和 outHeight</strong> 参数；</li>
+<li>结合目标 View 所需大小来计算所需采样率 inSampleSize；</li>
+<li>将 BitmapFactory.Options 的 <strong>inJustDecodeBounds</strong> 设置为 false，重新加载图片。</li>
+</ul>
+<blockquote>
+<p>设置 <strong>inJustDecodeBounds</strong> 参数为 true 时只会解析图片的宽/高信息，并不会去加载图片，所以该操作是轻量级的。</p>
+</blockquote>
+<h3 id="缩放法压缩（martix）"><a href="#缩放法压缩（martix）" class="headerlink" title="缩放法压缩（martix）"></a>缩放法压缩（martix）</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> matrix = Matrix();</span><br><span class="line">matrix.setScale(<span class="number">0.5f</span>, <span class="number">0.5f</span>);</span><br><span class="line">bm = Bitmap.createBitmap(bit, <span class="number">0</span>, <span class="number">0</span>, bit.getWidth(),bit.getHeight(), matrix, <span class="keyword">true</span>);</span><br><span class="line"> Log.i(<span class="string">"wechat"</span>, <span class="string">"压缩后图片的大小"</span> + (bm.getByteCount() / <span class="number">1024</span> / <span class="number">1024</span>)</span><br><span class="line">                    + <span class="string">"M宽度为"</span> + bm.getWidth() + <span class="string">"高度为"</span> + bm.getHeight());</span><br></pre></td></tr></table></figure>
+
+
+
+<p>*<em>只要改变图片的  宽/高/每个像素占用的字节数 中的其中一个就能达到压缩效果 *</em></p>
+<h2 id="Android-Bitmap缓存策略"><a href="#Android-Bitmap缓存策略" class="headerlink" title="Android Bitmap缓存策略"></a>Android Bitmap缓存策略</h2><ul>
+<li>LruCache：内存缓存</li>
+<li>DiskLruCache：磁盘缓存</li>
+</ul>
+<h3 id="LruCache"><a href="#LruCache" class="headerlink" title="LruCache:"></a>LruCache:</h3><blockquote>
+<p><strong>LRU (Least Recently Used)</strong> :最近最少使用算法，核心思想，当缓存满了，会优先把近期最少使用的缓存对象淘汰掉。</p>
+</blockquote>
+<p><img src="./linked.png" alt=""></p>
+<p><strong>LinkedHashMap是由数组+双向链表的数据结构来实现的。其中双向链表的结构可以实现访问顺序和插入顺序，使得LinkedHashMap中的&lt;key,value&gt;对按照一定顺序排列起来。</strong></p>
+<p><strong>使用：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">val cacheSize: Int = (Runtime.getRuntime().totalMemory() / <span class="number">1024</span> / <span class="number">8</span>).toInt()</span><br><span class="line">        lruCache = object : LruCache&lt;String, Bitmap&gt;(cacheSize) &#123;</span><br><span class="line">            <span class="comment">//返回一张图片的大小</span></span><br><span class="line">            <span class="function">override fun <span class="title">sizeOf</span><span class="params">(key: String?, value: Bitmap?)</span>: Int </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt; Build.VERSION_CODES.KITKAT) &#123;</span><br><span class="line">                    value?.allocationByteCount ?: <span class="number">1</span></span><br><span class="line">                &#125; <span class="keyword">else</span> value?.byteCount ?: <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">/**</span></span><br><span class="line"><span class="comment">             * bitmap内存回收</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            <span class="function">override fun <span class="title">entryRemoved</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">                evicted: Boolean,</span></span></span><br><span class="line"><span class="function"><span class="params">                key: String?,</span></span></span><br><span class="line"><span class="function"><span class="params">                oldValue: Bitmap?,</span></span></span><br><span class="line"><span class="function"><span class="params">                newValue: Bitmap?</span></span></span><br><span class="line"><span class="function"><span class="params">            )</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (oldValue!!.isMutable) &#123;</span><br><span class="line">                    reusablePool.add(</span><br><span class="line">                        WeakReference(</span><br><span class="line">                            oldValue,</span><br><span class="line">                            getReferenceQueue()</span><br><span class="line">                        )</span><br><span class="line">                    )</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    oldValue.recycle()</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//这里使用了引用队列，将回收掉的bitmap对象的内存存起来，避免新的bitmap创建申请内存花费的时间。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="DiskLruCache"><a href="#DiskLruCache" class="headerlink" title="DiskLruCache"></a><strong>DiskLruCache</strong></h3><blockquote>
+<p> DiskLruCache 的缓存添加操作是通过 Editor 完成的。<br> 例如缓存图片，首先获取 url 所对应的 key（使用加密算法处理避免 url 字符违法），然后通过 <code>edit()</code> 来获取 Editor 再获取输出流将文件输出到磁盘上，最后一定记得 <strong><code>commit()</code></strong>。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 用于创建DiskLruCache</span></span><br><span class="line"><span class="comment">* 参数一：表示磁盘在文件系统中存储的路径</span></span><br><span class="line"><span class="comment">* 参数二：表示应用的版本号，一般设为1，当版本号发生改变时，会将之前的缓存信息清空</span></span><br><span class="line"><span class="comment">* 参数三：表示单个节点所对应的数据的个数，一般设为1</span></span><br><span class="line"><span class="comment">* 参数四：表示缓存的总大小，当缓存大小超过这个设定值后，DiskLruCache会清除一些缓存，从而保证不会超过这个设定值</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">diskLruCache = DiskLruCache.open(File(dir), BuildConfig.VERSION_CODE, <span class="number">1</span>, <span class="number">10</span> * <span class="number">1024</span> * <span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将图片放入磁盘中</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">fun <span class="title">putBitmap2Disk</span><span class="params">(key: String, bitmap: Bitmap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> snapshot: DiskLruCache.Snapshot? = <span class="keyword">null</span></span><br><span class="line">    <span class="keyword">var</span> os: OutputStream? = <span class="keyword">null</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        snapshot = diskLruCache?.get(key)</span><br><span class="line">        <span class="comment">//判断磁盘中是否有该资源</span></span><br><span class="line">        <span class="keyword">if</span> (snapshot == <span class="keyword">null</span>) &#123;</span><br><span class="line">            val edit = diskLruCache?.edit(key)</span><br><span class="line">            <span class="keyword">if</span> (edit != <span class="keyword">null</span>) &#123;</span><br><span class="line">                os = edit.newOutputStream(<span class="number">0</span>)</span><br><span class="line">                <span class="comment">//压缩图片</span></span><br><span class="line">                bitmap.compress(Bitmap.CompressFormat.PNG, <span class="number">50</span>, os)</span><br><span class="line">                edit.commit()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        snapshot?.close()</span><br><span class="line">        os?.close()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h1><ul>
+<li>进行Bitmap优化的方式有三种：<ul>
+<li>对图片质量进行压缩</li>
+<li>对图片尺寸进行压缩</li>
+<li>使用libjpeg.so库进行压缩，</li>
+</ul>
+</li>
+<li>加载大图片或者一次性加载多张图片，应该在异步线程中进行。图片的加载，涉及到 IO 操作，以及 CPU 密集操作，很可能引起卡顿</li>
+<li>png 图片使用 tinypng 或者类似工具压缩处理，减少包体积。</li>
+<li>使用完毕的图片，应该及时回收，释放宝贵的内存。</li>
+<li>针对不同的屏幕密度，提供对应的图片资源，使内存占用和显示效果达到合理的平衡。如果为了节省包体积，可以在不影响 UI 效果的前提下，省略低密度图片。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Bitmap</category>
+        <category>优化</category>
+        <category>LruCache</category>
+      </categories>
+      <tags>
+        <tag>Bitmap</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>jvm</title>
     <url>/2020/02/02/jvm/</url>
     <content><![CDATA[<p>JVM简介</p>
